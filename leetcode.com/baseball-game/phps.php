@@ -1,6 +1,6 @@
 <?php
 
-function parseScore($ops) {
+function solve($ops) {
     for($i = 0; $i < sizeof($ops); $i++) {
         if ($ops[$i] == 'C') {
             $del = array_splice($ops, $i - 1, 2);
@@ -15,6 +15,22 @@ function parseScore($ops) {
         }
     }
     return $ops;
+}
+
+function solveTwo($ops) {
+    $score = array();
+    foreach ($ops as $key => $op) {
+        if ($op == 'D') {
+            array_push($score, $score[count($score) - 1] * 2);
+        } elseif ($op == 'C') {
+            array_splice($score, count($score) - 1, 1);
+        } elseif ($op == '+') {
+            array_push($score, $score[count($score) - 1] + $score[count($score) - 2]);
+        } else {
+            array_push($score, $op);
+        }
+    }
+    return $score;
 }
 
 $scores = [
@@ -34,12 +50,8 @@ $scores = [
 ];
 
 foreach ($scores as $score) {
-    $arr = parseScore($score['score']);
-    if (array_sum($arr) == $score['result']) {
-        echo "CORRECT\n";
-    } else {
-        echo "INCORRECT\n";
-    }
+    $arr = solveTwo($score['score']);
+    echo array_sum($arr) == $score['result'] ? "CORRECT\n" : "INCORRECT\n";
 }
 
 
